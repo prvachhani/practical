@@ -22,14 +22,26 @@ class ContactController extends Controller
 
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
+        
+        $validator = Validator::make($request->all(), [
             'name' => 'required|max:255',
             'email' => 'required|email|unique:contacts,email',
             'phone' => 'required|max:20',
             'country' => 'required|max:255',
             'city' => 'required|max:255',
             'state' => 'required|max:255',
+        ],[
+            'name.required' => 'Please Enter Your name',
+            'email.required' => 'Please Enter Your Email',
+            'phone.required' => 'Please Enter Your phone',
+            'country.required' => 'Please Enter Your country',
+            'city.required' => 'Please Enter Your city',
+            'state.required' => 'Please Enter Your state',
         ]);
+            if ($validator->fails()) {
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
+        
 
         Contact::create($validatedData);
 
@@ -43,14 +55,27 @@ class ContactController extends Controller
 
     public function update(Request $request, Contact $contact)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:contacts,email,' . $contact->id,
-            'phone' => 'required|string|max:20',
-            'country' => 'required|string|max:255',
-            'city' => 'required|string|max:255',
-            'state' => 'required|string|max:255',
+        
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|max:255',
+            'email' => 'required|email|unique:contacts,email',
+            'phone' => 'required|max:20',
+            'country' => 'required|max:255',
+            'city' => 'required|max:255',
+            'state' => 'required|max:255',
+        ],[
+            'name.required' => 'Please Enter Your name',
+            'email.required' => 'Please Enter Your Email',
+            'phone.required' => 'Please Enter Your phone',
+            'country.required' => 'Please Enter Your country',
+            'city.required' => 'Please Enter Your city',
+            'state.required' => 'Please Enter Your state',
         ]);
+            if ($validator->fails()) {
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
+        
 
         $contact->update($validatedData);
 
